@@ -1,6 +1,8 @@
 'use client';
 import { useState, useEffect } from 'react';
 
+import DropdownMenu, { DropdownItem } from './DropdownMenu';
+
 export default function Home() {
   const [gados, setGados] = useState([]);
   const [form, setForm] = useState({
@@ -100,31 +102,56 @@ export default function Home() {
     });
     setEditando(null);
   };
+  
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 p-8">
+  return ( 
+       
+<div className="min-h-screen bg-[#F7ECE1]">
+  <header className="bg-green-600 w-full mb-10">
+    <div className="flex justify-between items-center p-4">
+      <h1 className="text-4xl font-bold text-white">
+        Sistema de Vacinação de Gado
+      </h1>
+      <button className="cursor-pointer text-white hover:text-gray-300 transition duration-150 ease-in-out">
+        Sair
+      </button>
+    </div>
+    <hr></hr>
+    <nav className="bg-green-600 p-2">
+      <div className="max-w-7xl mx-auto flex space-x-4">
+        
+        <DropdownMenu title="Gado">
+          <DropdownItem href="#">Cadastrar Gado</DropdownItem>
+          <DropdownItem href="#">Lista de Gados</DropdownItem>
+        </DropdownMenu>
+    
+        <DropdownMenu title="Vacinas">
+          <DropdownItem href="page.js">Vacinas</DropdownItem>
+          <DropdownItem href="#">Gados Vacinados</DropdownItem>
+        </DropdownMenu>
+
+      </div>
+    </nav>
+  </header>
+
+      {/* Formulário */}
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold text-gray-800 mb-8 text-center">
-          🐄 Gestão de Gado
-        </h1>
-
-        {/* Formulário */}
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-          <h2 className="text-2xl font-semibold mb-4">
-            {editando ? '✏️ Editar Gado' : '➕ Cadastrar Novo Gado'}
+        <div className="bg-white rounded-t-[10px] shadow-lg pt-0 pb-6 pr-0 pl-0 mb-8">
+          <h2 className="bg-green-600 text-3xl text-white-900 font-semibold mb-4 pb-3 pt-2 pl-3 rounded-t-[10px]">
+            {editando ? '✏️ Editar Gado' : 'Cadastrar Novo Gado'}
           </h2>
-          
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 pr-6 pl-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-800 mb-1">
                 Identificação *
               </label>
-              <input
+              <input 
                 type="text"
                 required
                 value={form.identificacao}
                 onChange={(e) => setForm({...form, identificacao: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full px-3 py-2 text-gray-700 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent focus:outline-none"
               />
             </div>
 
@@ -136,7 +163,7 @@ export default function Home() {
                 type="text"
                 value={form.nome}
                 onChange={(e) => setForm({...form, nome: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full px-3 py-2 text-gray-700 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent focus:outline-none"
               />
             </div>
 
@@ -148,10 +175,9 @@ export default function Home() {
                 required
                 value={form.sexo}
                 onChange={(e) => setForm({...form, sexo: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              >
-                <option value="M">Macho</option>
-                <option value="F">Fêmea</option>
+                className="w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent focus:outline-none">
+                <option value="M" className='text-gray-700'>Macho</option>
+                <option value="F" className='text-gray-700'>Fêmea</option>
               </select>
             </div>
 
@@ -163,7 +189,7 @@ export default function Home() {
                 type="text"
                 value={form.raca}
                 onChange={(e) => setForm({...form, raca: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent focus:outline-none"
               />
             </div>
 
@@ -175,7 +201,7 @@ export default function Home() {
                 type="date"
                 value={form.data_nascimento}
                 onChange={(e) => setForm({...form, data_nascimento: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent focus:outline-none"
               />
             </div>
 
@@ -187,7 +213,7 @@ export default function Home() {
                 type="number"
                 value={form.pai_id}
                 onChange={(e) => setForm({...form, pai_id: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent focus:outline-none"
               />
             </div>
 
@@ -199,15 +225,15 @@ export default function Home() {
                 type="number"
                 value={form.mae_id}
                 onChange={(e) => setForm({...form, mae_id: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent focus:outline-none"
               />
             </div>
 
-            <div className="md:col-span-2 flex gap-2">
+            <div className="md:col-span-2 flex gap-2 p-6">
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition disabled:bg-gray-400"
+                className="flex-1 bg-green-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition disabled:bg-gray-400"
               >
                 {loading ? 'Processando...' : (editando ? 'Atualizar' : 'Cadastrar')}
               </button>
@@ -226,6 +252,7 @@ export default function Home() {
         </div>
 
         {/* Tabela */}
+        
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -245,17 +272,18 @@ export default function Home() {
               <tbody>
                 {gados.length === 0 ? (
                   <tr>
-                    <td colSpan="9" className="px-4 py-8 text-center text-gray-500">
+                    <td colSpan="9" className="px-4 py-8 text-center text-gray-50">
                       Nenhum gado cadastrado ainda
                     </td>
                   </tr>
                 ) : (
                   gados.map((gado, index) => (
+                    
                     <tr key={gado.id} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
                       <td className="px-4 py-3">{gado.id}</td>
                       <td className="px-4 py-3 font-semibold">{gado.identificacao}</td>
                       <td className="px-4 py-3">{gado.nome || '-'}</td>
-                      <td className="px-4 py-3">{gado.sexo === 'M' ? '♂️ Macho' : '♀️ Fêmea'}</td>
+                      <td className="px-4 py-3 text-black">{gado.sexo === 'M' ? '♂️ Macho' : '♀️ Fêmea'}</td>
                       <td className="px-4 py-3">{gado.raca || '-'}</td>
                       <td className="px-4 py-3">
                         {gado.data_nascimento ? new Date(gado.data_nascimento).toLocaleDateString('pt-BR') : '-'}
@@ -284,7 +312,8 @@ export default function Home() {
               </tbody>
             </table>
           </div>
-        </div>
+        </div> 
+        
       </div>
     </div>
   );
