@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 
-import DropdownMenu, { DropdownItem } from './DropdownMenu';
+import DropdownMenu, { DropdownItem } from './dropdown-menu';
 
 export default function Home() {
   const [gados, setGados] = useState([]);
@@ -107,7 +107,7 @@ export default function Home() {
   return ( 
        
 <div className="min-h-screen bg-[#F7ECE1]">
-  <header className="bg-green-600 w-full mb-10">
+  <header className="bg-gradient-to-r from-[#2d5016] to-[#4a7c2c] w-full mb-10">
     <div className="flex justify-between items-center p-4">
       <h1 className="text-4xl font-bold text-white">
         Sistema de Vacinação de Gado
@@ -117,7 +117,7 @@ export default function Home() {
       </button>
     </div>
     <hr></hr>
-    <nav className="bg-green-600 p-2">
+    <nav className="bg-gradient-to-r from-[#2d5016] to-[#4a7c2c] p-2">
       <div className="max-w-7xl mx-auto flex space-x-4">
         
         <DropdownMenu title="Gado">
@@ -137,7 +137,7 @@ export default function Home() {
       {/* Formulário */}
       <div className="max-w-6xl mx-auto">
         <div className="bg-white rounded-t-[10px] shadow-lg pt-0 pb-6 pr-0 pl-0 mb-8">
-          <h2 className="bg-green-600 text-3xl text-white-900 font-semibold mb-4 pb-3 pt-2 pl-3 rounded-t-[10px]">
+          <h2 className="bg-gradient-to-r from-[#2d5016] to-[#4a7c2c] text-3xl text-white-900 font-semibold mb-4 pb-3 pt-2 pl-3 rounded-t-[10px]">
             {editando ? '✏️ Editar Gado' : 'Cadastrar Novo Gado'}
           </h2>
         
@@ -233,7 +233,7 @@ export default function Home() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 bg-green-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition disabled:bg-gray-400"
+                className="flex-1 hover:bg-[#2d5016] bg-[#4a7c2c] text-white font-bold py-2 px-4 rounded-lg transition disabled:bg-gray-400"
               >
                 {loading ? 'Processando...' : (editando ? 'Atualizar' : 'Cadastrar')}
               </button>
@@ -256,7 +256,7 @@ export default function Home() {
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-green-600 text-white">
+              <thead className="bg-gradient-to-t from-[#2d5016] to-[#4a7c2c] text-white">
                 <tr>
                   <th className="px-4 py-3 text-left">ID</th>
                   <th className="px-4 py-3 text-left">Identificação</th>
@@ -280,12 +280,12 @@ export default function Home() {
                   gados.map((gado, index) => (
                     
                     <tr key={gado.id} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                      <td className="px-4 py-3">{gado.id}</td>
-                      <td className="px-4 py-3 font-semibold">{gado.identificacao}</td>
-                      <td className="px-4 py-3">{gado.nome || '-'}</td>
-                      <td className="px-4 py-3 text-black">{gado.sexo === 'M' ? '♂️ Macho' : '♀️ Fêmea'}</td>
-                      <td className="px-4 py-3">{gado.raca || '-'}</td>
-                      <td className="px-4 py-3">
+                      <td className="px-4 py-3 text-gray-700">{gado.id}</td>
+                      <td className="px-4 py-3 text-gray-700">{gado.identificacao}</td>
+                      <td className="px-4 py-3 text-gray-700">{gado.nome || '-'}</td>
+                      <td className="px-4 py-3 text-gray-700">{gado.sexo === 'M' ? 'Macho' : 'Fêmea'}</td>
+                      <td className="px-4 py-3 text-gray-700">{gado.raca || '-'}</td>
+                      <td className="px-4 py-3 text-gray-700">
                         {gado.data_nascimento ? new Date(gado.data_nascimento).toLocaleDateString('pt-BR') : '-'}
                       </td>
                       <td className="px-4 py-3">{gado.nome_pai || '-'}</td>
