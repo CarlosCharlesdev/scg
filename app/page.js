@@ -126,8 +126,8 @@ export default function Home() {
         </DropdownMenu>
     
         <DropdownMenu title="Vacinas">
-          <DropdownItem href="page.js">Vacinas</DropdownItem>
-          <DropdownItem href="#">Gados Vacinados</DropdownItem>
+          <DropdownItem href="/vacinas">Vacinas</DropdownItem>
+          <DropdownItem href="/vacinacao">Gados Vacinados</DropdownItem>
         </DropdownMenu>
 
       </div>
