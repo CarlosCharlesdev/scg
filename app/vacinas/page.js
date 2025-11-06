@@ -205,7 +205,7 @@ export default function VacinasPage() {
         
             <DropdownMenu title="Vacinas">
               <DropdownItem href="/vacinas">Vacinas</DropdownItem>
-              <DropdownItem href="/vacinacao">Gados Vacinados</DropdownItem>
+              <DropdownItem href="/gado-vacinados">Gados Vacinados</DropdownItem>
             </DropdownMenu>
           </div>
         </nav>

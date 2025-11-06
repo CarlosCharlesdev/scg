@@ -10,7 +10,7 @@ const pool = new Pool({
   password: '25052003',
 });
 
-// PUT - Atualizar vacina pelo NOME
+// PUT - Atualizar  vacina pelo NOME
 export async function PUT(request, { params }) {
   try {
     const { id } = await params; // Await necessário no Next.js 15+
