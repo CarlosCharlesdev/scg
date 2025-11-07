@@ -123,8 +123,8 @@ return (
 	        </DropdownMenu>
     
         <DropdownMenu title="Vacinas">
-          <DropdownItem href="#">Vacinas</DropdownItem>
-          <DropdownItem href="#">Gados Vacinados</DropdownItem>
+          <DropdownItem href="/vacinas">Vacinas</DropdownItem>
+          <DropdownItem href="/gado-vacinados">Gados Vacinados</DropdownItem>
         </DropdownMenu>
 
       </div>
