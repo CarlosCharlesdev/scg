@@ -12,14 +12,13 @@ const pool = new Pool({
 export async function GET() {
   try {
     const result = await pool.query(`
-      SELECT 
-        g.*,
-        p.nome as nome_pai,
-        m.nome as nome_mae
-      FROM gado g
-      LEFT JOIN gado p ON g.pai_id = p.id
-      LEFT JOIN gado m ON g.mae_id = m.id
-      ORDER BY g.id
+SELECT 
+    g.*, 
+    pai.identificacao AS identificacao_pai, 
+    mae.identificacao AS identificacao_mae
+  FROM gado g
+  LEFT JOIN gado pai ON g.pai_id = pai.id
+  LEFT JOIN gado mae ON g.mae_id = mae.id
     `);
     return NextResponse.json(result.rows);
   } catch (error) {
@@ -30,12 +29,12 @@ export async function GET() {
 export async function POST(request) {
   try {
     const data = await request.json();
-    const { identificacao, nome, sexo, raca, data_nascimento, pai_id, mae_id } = data;
+    const { identificacao, sexo, raca, data_nascimento, pai_id, mae_id } = data;
     
     const result = await pool.query(
-      `INSERT INTO gado (identificacao, nome, sexo, raca, data_nascimento, pai_id, mae_id)
-       VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
-      [identificacao, nome, sexo, raca, data_nascimento, pai_id || null, mae_id || null]
+      `INSERT INTO gado (identificacao, sexo, raca, data_nascimento, pai_id, mae_id)
+       VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+      [identificacao, sexo, raca, data_nascimento, pai_id || null, mae_id || null]
     );
     
     return NextResponse.json(result.rows[0], { status: 201 });

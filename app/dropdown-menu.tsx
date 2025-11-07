@@ -34,7 +34,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ title, children }) => {
       <div>
         <button
           type="button"
-          className="inline-flex justify-center w-full  border border-transparent  px-4 py-2 bg-[2d5016] text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-600 focus:ring-white transition duration-150 ease-in-out cursor-pointer pb-5 mb-[-5] mt-[-7] "
+          className="inline-flex justify-center w-full px-5 py-3 pb-5 mb-[-7] mt-[0] cursor-pointer text-sm font-medium text-white  bg-[2d5016] hover:border-b-1 hover:bg-[#4a7c2c] focus:border-1 focus:border-t-1 focus:ring-offset-0 focus:bg-[#4a7c2c] focus:ring-white  transition duration-150 ease-in-out"
           id={`menu-button-${title}`}
           aria-expanded={isOpen}
           aria-haspopup="true"
@@ -57,10 +57,10 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ title, children }) => {
         </button>
       </div>
 
-      {isOpen && (
-        <div
-          className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
-          role="menu"
+	      {isOpen && (
+	        <div
+	          className="origin-top-left absolute left-0 mt-2 w-max min-w-[12rem] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
+	          role="menu"
           aria-orientation="vertical"
           aria-labelledby={`menu-button-${title}`}
           tabIndex={-1}

@@ -11,16 +11,16 @@ const pool = new Pool({
 
 export async function PUT(request, { params }) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const data = await request.json();
-    const { identificacao, nome, sexo, raca, data_nascimento, pai_id, mae_id } = data;
+    const { identificacao, sexo, raca, data_nascimento, pai_id, mae_id } = data;
     
     const result = await pool.query(
       `UPDATE gado 
-       SET identificacao = $1, nome = $2, sexo = $3, raca = $4, 
-           data_nascimento = $5, pai_id = $6, mae_id = $7
-       WHERE id = $8 RETURNING *`,
-      [identificacao, nome, sexo, raca, data_nascimento, pai_id || null, mae_id || null, id]
+       SET identificacao = $1, sexo = $2, raca = $3, 
+           data_nascimento = $4, pai_id = $5, mae_id = $6
+       WHERE id = $7 RETURNING *`,
+      [identificacao, sexo, raca, data_nascimento, pai_id || null, mae_id || null, id]
     );
     
     if (result.rows.length === 0) {
@@ -36,7 +36,7 @@ export async function PUT(request, { params }) {
 // DELETE - Deletar gado
 export async function DELETE(request, { params }) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const result = await pool.query('DELETE FROM gado WHERE id = $1 RETURNING *', [id]);
     
     if (result.rows.length === 0) {
