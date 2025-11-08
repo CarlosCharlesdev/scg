@@ -24,15 +24,15 @@ const ModalVacinacao = ({ isOpen, onClose, form, setForm, editando, loading, han
   }, [form.data_aplicacao, form.vacina_id]);
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black bg-transparent backdrop-blur-[2px] flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-3xl mx-4 max-h-[90vh] overflow-y-auto">
         <div className="bg-gradient-to-r from-[#2d5016] to-[#4a7c2c] text-white px-6 py-4 rounded-t-lg flex justify-between items-center sticky top-0">
           <h2 className="text-2xl font-semibold">
-            {editando ? '✏️ Editar Vacinação' : '💉 Registrar Vacinação'}
+            {editando ? 'Editar Vacinação' : 'Registrar Vacinação'}
           </h2>
           <button 
             onClick={onClose}
-            className="text-white hover:text-gray-200 text-2xl font-bold"
+            className="text-white hover:text-gray-200 text-2xl font-bold cursor-pointer"
           >
             ×
           </button>
@@ -153,7 +153,7 @@ const ModalVacinacao = ({ isOpen, onClose, form, setForm, editando, loading, han
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 hover:bg-[#2d5016] bg-[#4a7c2c] text-white font-bold py-2 px-4 rounded-lg transition disabled:bg-gray-400"
+              className="flex-1 hover:bg-[#2d5016] bg-[#4a7c2c] text-white font-bold py-2 px-4 rounded-lg transition disabled:bg-gray-400 cursor-pointer"
             >
               {loading ? 'Processando...' : (editando ? 'Atualizar' : 'Registrar')}
             </button>
@@ -161,7 +161,7 @@ const ModalVacinacao = ({ isOpen, onClose, form, setForm, editando, loading, han
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition"
+              className="px-6 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition cursor-pointer"
             >
               Cancelar
             </button>
@@ -324,136 +324,135 @@ export default function GadosVacinadosPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F7ECE1]">
+    <div className="flex flex-col min-h-screen bg-[#F7ECE1]">
       <header className="bg-gradient-to-r from-[#2d5016] to-[#4a7c2c] w-full mb-10">
         <div className="flex justify-between items-center p-4">
           <h1 className="text-4xl font-bold text-white">
-            Sistema de Vacinação de Gado
+            Sistema de Controle do Gado
           </h1>
-          <button className="cursor-pointer text-white hover:text-gray-300 transition duration-150 ease-in-out">
+          <button onClick={() => window.location.replace('/')} className="cursor-pointer text-white p-2 rounded-lg transition border border-white duration-200 ease-in-out hover:ring hover:ring-white hover:ring-offset-1 hover:bg-white hover:text-black ">
             Sair
           </button>
         </div>
-        <hr />
-        <nav className="bg-gradient-to-r from-[#2d5016] to-[#4a7c2c] p-2">
-          <div className="max-w-7xl mx-auto flex space-x-4">
+        <hr className="border-[#2d5016] flex"></hr>
+        <nav className="bg-gradient-to-r from-[#2d5016] to-[#4a7c2c] p-2 pl-1 pt-0">
+          <div className="mx-auto flex space-x-1">
             <DropdownMenu title="Gado">
-              <DropdownItem href="/">Cadastrar Gado</DropdownItem>
-              <DropdownItem href="/">Lista de Gados</DropdownItem>
+              <DropdownItem href="/gados">Cadastrar Gado</DropdownItem>
+              <DropdownItem href="/gado-situacoes">Situação Gado</DropdownItem>
             </DropdownMenu>
         
             <DropdownMenu title="Vacinas">
               <DropdownItem href="/vacinas">Vacinas</DropdownItem>
-              <DropdownItem href="/gados-vacinados">Gados Vacinados</DropdownItem>
+              <DropdownItem href="/gado-vacinados">Gados Vacinados</DropdownItem>
             </DropdownMenu>
           </div>
         </nav>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="flex-grow">
         {/* Barra de Busca, Filtros e Botão */}
-        <div className="bg-white rounded-lg shadow-lg p-4 mb-6">
-          <div className="flex flex-col md:flex-row gap-4 items-center">
-            <div className="flex-1 w-full">
-              <div className="relative">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="bg-white rounded-lg shadow-lg p-4 mb-6">
+            <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+              <div className="flex-1 w-full md:w-auto">
                 <input
                   type="text"
                   placeholder="Buscar por gado ou vacina..."
                   value={busca}
                   onChange={(e) => setBusca(e.target.value)}
-                  className="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent focus:outline-none text-gray-700"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent focus:outline-none text-gray-700"
                 />
-                <span className="absolute left-3 top-2.5 text-gray-400">🔍</span>
               </div>
+              
+              <select
+                value={filtroStatus}
+                onChange={(e) => setFiltroStatus(e.target.value)}
+                className="w-full md:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent focus:outline-none text-gray-700"
+              >
+                <option value="todos">Todos os Status</option>
+                <option value="aplicada">✅ Aplicada</option>
+                <option value="pendente">⏳ Pendente</option>
+                <option value="vencida">❌ Vencida</option>
+              </select>
+
+              <button
+                onClick={abrirModalNovo}
+                className="w-full md:w-auto bg-[#4a7c2c] hover:bg-[#2d5016] text-white font-bold py-2 px-6 rounded-lg transition whitespace-nowrap cursor-pointer"
+              >
+                + Registrar Vacinação
+              </button>
             </div>
-            
-            <select
-              value={filtroStatus}
-              onChange={(e) => setFiltroStatus(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent focus:outline-none text-gray-700"
-            >
-              <option value="todos">Todos os Status</option>
-              <option value="aplicada">✅ Aplicada</option>
-              <option value="pendente">⏳ Pendente</option>
-              <option value="vencida">❌ Vencida</option>
-            </select>
-
-            <button
-              onClick={abrirModalNovo}
-              className="bg-[#4a7c2c] hover:bg-[#2d5016] text-white font-bold py-2 px-6 rounded-lg transition whitespace-nowrap"
-            >
-              + Registrar Vacinação
-            </button>
           </div>
-        </div>
 
-        {/* Tabela */}
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gradient-to-t from-[#2d5016] to-[#4a7c2c] text-white">
-                <tr>
-                  <th className="px-4 py-3 text-left">AÇÕES</th>
-                  <th className="px-4 py-3 text-left">GADO</th>
-                  <th className="px-4 py-3 text-left">VACINA</th>
-                  <th className="px-4 py-3 text-left">DATA APLICAÇÃO</th>
-                  <th className="px-4 py-3 text-left">DATA VALIDADE</th>
-                  <th className="px-4 py-3 text-left">STATUS</th>
-                </tr>
-              </thead>
-              <tbody>
-                {vacinacoesFiltradas.length === 0 ? (
+          {/* Tabela */}
+          <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-10">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gradient-to-t from-[#2d5016] to-[#4a7c2c] text-white">
                   <tr>
-                    <td colSpan="6" className="px-4 py-8 text-center text-gray-500">
-                      {busca || filtroStatus !== 'todos' 
-                        ? 'Nenhum registro encontrado' 
-                        : 'Nenhuma vacinação registrada ainda'}
-                    </td>
+                    <th className="px-4 py-3 text-left">AÇÕES</th>
+                    <th className="px-4 py-3 text-left">GADO</th>
+                    <th className="px-4 py-3 text-left">VACINA</th>
+                    <th className="px-4 py-3 text-left">DATA APLICAÇÃO</th>
+                    <th className="px-4 py-3 text-left">DATA VALIDADE</th>
+                    <th className="px-4 py-3 text-left">STATUS</th>
                   </tr>
-                ) : (
-                  vacinacoesFiltradas.map((vac, index) => (
-                    <tr key={vac.id} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                      <td className="px-4 py-3">
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => handleEditar(vac)}
-                            className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded transition text-sm"
-                            title="Editar"
-                          >
-                            ✏️
-                          </button>
-                          <button
-                            onClick={() => handleDeletar(vac.id)}
-                            className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition text-sm"
-                            title="Deletar"
-                          >
-                            🗑️
-                          </button>
-                        </div>
-                      </td>
-                      <td className="px-4 py-3 text-gray-700">
-                        <div>
-                          <p className="font-semibold">{vac.gado_identificacao}</p>
-                          {vac.gado_nome && <p className="text-sm text-gray-500">{vac.gado_nome}</p>}
-                        </div>
-                      </td>
-                      <td className="px-4 py-3 font-semibold text-gray-700">{vac.vacina_nome}</td>
-                      <td className="px-4 py-3 text-gray-700">
-                        {new Date(vac.data_aplicacao).toLocaleDateString('pt-BR')}
-                      </td>
-                      <td className="px-4 py-3 text-gray-700">
-                        {vac.data_validade ? new Date(vac.data_validade).toLocaleDateString('pt-BR') : '-'}
-                      </td>
-                      <td className="px-4 py-3">
-                        <span className={`px-2 py-1 rounded text-xs font-semibold ${getStatusBadge(vac.status)}`}>
-                          {getStatusEmoji(vac.status)} {vac.status.charAt(0).toUpperCase() + vac.status.slice(1)}
-                        </span>
+                </thead>
+                <tbody>
+                  {vacinacoesFiltradas.length === 0 ? (
+                    <tr>
+                      <td colSpan="6" className="px-4 py-8 text-center text-gray-500">
+                        {busca || filtroStatus !== 'todos' 
+                          ? 'Nenhum registro encontrado' 
+                          : 'Nenhuma vacinação registrada ainda'}
                       </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ) : (
+                    vacinacoesFiltradas.map((vac, index) => (
+                      <tr key={vac.id} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                        <td className="px-4 py-3">
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleEditar(vac)}
+                              className="text-white px-3 py-1 rounded transition text-sm cursor-pointer"
+                              title="Editar"
+                            >
+                              <img src="lapis.png" alt="Editar" className="w-4 h-4"></img>
+                            </button>
+                            <button
+                              onClick={() => handleDeletar(vac.id)}
+                              className="text-white px-3 py-1 rounded transition text-sm cursor-pointer cursor-pointer"
+                              title="Deletar"
+                            >
+                              <img src="lixo.png" alt="Deletar" className="w-4 h-4"></img>
+                            </button>
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 text-gray-700">
+                          <div>
+                            <p>{vac.gado_identificacao}</p>
+                            {vac.gado_nome && <p className="text-sm text-gray-500">{vac.gado_nome}</p>}
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 text-gray-700">{vac.vacina_nome}</td>
+                        <td className="px-4 py-3 text-gray-700">
+                          {new Date(vac.data_aplicacao).toLocaleDateString('pt-BR')}
+                        </td>
+                        <td className="px-4 py-3 text-gray-700">
+                          {vac.data_validade ? new Date(vac.data_validade).toLocaleDateString('pt-BR') : '-'}
+                        </td>
+                        <td className="px-4 py-3">
+                          <span className={`px-2 py-1 rounded text-xs font-semibold ${getStatusBadge(vac.status)}`}>
+                            {getStatusEmoji(vac.status)} {vac.status.charAt(0).toUpperCase() + vac.status.slice(1)}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -470,6 +469,14 @@ export default function GadosVacinadosPage() {
         gados={gados}
         vacinas={vacinas}
       />
+
+      <footer className="bg-gradient-to-r from-[#2d5016] to-[#4a7c2c] w-full p-4">
+        <div className="max-w-6xl mx-auto">
+          <p className="text-white text-center">
+            Sistema de Vacinação de Gado - Desenvolvido por Carlos Charles & Vinicius Alexander
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
