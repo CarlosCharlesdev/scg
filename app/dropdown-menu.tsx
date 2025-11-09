@@ -34,7 +34,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ title, children }) => {
       <div>
         <button
           type="button"
-          className="inline-flex justify-center w-full px-5 py-3 pb-5 mb-[-7] mt-[0] cursor-pointer text-sm font-medium text-white  bg-[2d5016] hover:border-b-1 hover:bg-[#4a7c2c] focus:border-1 focus:border-t-1 focus:ring-offset-0 focus:bg-[#4a7c2c] focus:ring-white  transition duration-150 ease-in-out"
+          className="inline-flex justify-center w-full px-5 py-3 pb-5 mb-[-7] mt-[0] cursor-pointer text-sm font-medium text-white  bg-[2d5016] hover:border-b-2 focus:border-b-2"
           id={`menu-button-${title}`}
           aria-expanded={isOpen}
           aria-haspopup="true"

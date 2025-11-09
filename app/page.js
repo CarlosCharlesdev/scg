@@ -41,10 +41,10 @@ export default function LoginPage() {
         {/* Cabeçalho com as cores da aplicação */}
         <div className="bg-gradient-to-r from-[#2d5016] to-[#4a7c2c] p-6 text-white text-center">
           <h1 className="text-3xl font-bold">
-            Login
+            LOGIN
           </h1>
           <p className="text-sm mt-1 opacity-90">
-            Controle do Gado
+            Sistema de Controle do Gado
           </p>
         </div>
 

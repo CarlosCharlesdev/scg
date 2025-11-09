@@ -23,7 +23,7 @@ const ModalCondicao = ({ isOpen, onClose, form, setForm, editando, loading, hand
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Selecionar Gado */}
             <div>
-              <label className="block text-sm font-medium text-gray-800 mb-1">Gado *</label>
+              <label className="block text-sm font-medium text-gray-800 mb-1">Selecione um gado *</label>
               <select
                 required
                 value={form.gado_id}
@@ -39,7 +39,7 @@ const ModalCondicao = ({ isOpen, onClose, form, setForm, editando, loading, hand
 
             {/* Selecionar Condição */}
             <div>
-              <label className="block text-sm font-medium text-gray-800 mb-1">Condição *</label>
+              <label className="block text-sm font-medium text-gray-800 mb-1">Selecione a condição *</label>
               <select
                 required
                 value={form.condicao}
@@ -204,7 +204,7 @@ export default function GadoCondicaoPage() {
       <header className="bg-gradient-to-r from-[#2d5016] to-[#4a7c2c] w-full mb-10">
         <div className="flex justify-between items-center p-4">
           <h1 className="text-4xl font-bold text-white">Sistema de Controle do Gado</h1>
-          <button onClick={() => window.location.replace('/')} className="cursor-pointer text-white p-2 rounded-lg transition border border-white duration-200 hover:bg-white hover:text-black">
+          <button onClick={() => window.location.replace('/')} className="cursor-pointer text-white p-2 rounded-lg transition border border-white duration-200 ease-in-out  hover:ring-offset-1 hover:bg-white hover:text-black pl-4 pr-4">
             Sair
             </button>
         </div>
@@ -307,11 +307,66 @@ export default function GadoCondicaoPage() {
         gados={gados}
       />
 
-      <footer className="bg-gradient-to-r from-[#2d5016] to-[#4a7c2c] w-full p-4 mt-auto">
-        <div className="max-w-6xl mx-auto">
-          <p className="text-white text-center">Desenvolvido por Carlos Charles & Vinicius Alexander</p>
-        </div>
-      </footer>
+<footer className="bg-gradient-to-r from-[#2d5016] to-[#4a7c2c] w-full">
+		        <hr className="border-white/30" />
+		        <div className="max-w-6xl mx-auto px-6 py-8">
+		          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-2 justify-items-center">
+		            
+		            
+		            <div className="text-center md:text-left">
+		              <h3 className="text-white font-semibold text-lg mb-4 border-b-2 border-white/30 pb-2 inline-block">Carlos Charles</h3>
+		              <div className="flex flex-col gap-2">
+		                <div className="flex items-center gap-2">
+		                  <p className="text-white" title="Enviar email">
+		                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+		                    </svg>
+		                  </p>
+		                  <span className="text-white text-sm">carloscharles1616@gmail.com</span>
+		                </div>
+		                <div className="flex items-center gap-2">
+		                  <p className="text-white" title="Ligar">
+		                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+		                    </svg>
+		                  </p>
+		                  <span className="text-white text-sm">(69) 99270-0080</span>
+		                </div>
+		              </div>
+		            </div>
+		            
+		            
+		            <div className="text-center md:text-left">
+		              <h3 className="text-white font-semibold text-lg mb-4 border-b-2 border-white/30 pb-2 inline-block">Vinicius Alexander</h3>
+		              <div className="flex flex-col gap-2">
+		                <div className="flex items-center gap-2">
+		                  <p className="text-white" title="Enviar email">
+		                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+		                    </svg>
+		                  </p>
+		                  <span className="text-white text-sm">valexandersoares@gmail.com</span>
+		                </div>
+		                <div className="flex items-center gap-2">
+		                  <p className="text-white" title="Ligar">
+		                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+		                    </svg>
+		                  </p>
+		                  <span className="text-white text-sm">(69) 99207-7361</span>
+		                </div>
+		              </div>
+		            </div>
+		          </div>
+		        </div>
+		        
+		        {/* Copyright */}
+		        <div className="pt-4 mb-4 border-t border-[#2d5016] w-full">
+		          <p className="text-white/70 text-sm text-center">
+		            Copyright © 2025 Sistema de Controle do Gado. Todos os direitos reservados.
+		          </p>
+		        </div>
+		      </footer>	
     </div>
   );
 }
