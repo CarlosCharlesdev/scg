@@ -15,17 +15,13 @@ export async function GET() {
   try {
     const result = await pool.query(`
       SELECT 
-        g.*, g.peso,
-        CASE g.qualidade
-          WHEN 'B' THEN 'Bom'
-          WHEN 'N' THEN 'Neutra'
-          WHEN 'R' THEN 'Ruim'
-          WHEN 'D' THEN 'Desconhecido'
-          ELSE 'Desconhecido'
-        END as qualidade_extenso,
+        g.*, 
+        g.peso,
+        q.qualidade as qualidade_nome,
         p.identificacao as pai_identificador,
         m.identificacao as mae_identificador
       FROM gado g
+      LEFT JOIN qualidade q ON g.qualidade_id = q.id
       LEFT JOIN gado p ON g.pai_id = p.id
       LEFT JOIN gado m ON g.mae_id = m.id
       ORDER BY g.id DESC
@@ -40,11 +36,25 @@ export async function GET() {
 export async function POST(request) {
   try {
     const data = await request.json();
-    const { identificacao, sexo, raca, data_nascimento, qualidade, pai_identificador, mae_identificador } = data;
+    const { identificacao, sexo, raca, data_nascimento, qualidade_id, pai_identificador, mae_identificador } = data;
     const peso = data.peso && data.peso.toString().trim() !== '' ? data.peso : null;
     
     let pai_id = null;
     let mae_id = null;
+
+    // Validar se qualidade_id existe (se foi informado)
+    if (qualidade_id) {
+      const qualidadeResult = await pool.query(
+        'SELECT id FROM qualidade WHERE id = $1',
+        [qualidade_id]
+      );
+      
+      if (qualidadeResult.rows.length === 0) {
+        return NextResponse.json({ 
+          error: `Qualidade com ID "${qualidade_id}" não encontrada no banco de dados` 
+        }, { status: 400 });
+      }
+    }
 
     // Se foi informado identificador do pai, buscar o ID e validar se é macho
     if (pai_identificador && pai_identificador.trim() !== '') {
@@ -91,9 +101,9 @@ export async function POST(request) {
     }
 
     const result = await pool.query(
-      `INSERT INTO gado (identificacao, sexo, raca, data_nascimento, qualidade, pai_id, mae_id, peso)
+      `INSERT INTO gado (identificacao, sexo, raca, data_nascimento, qualidade_id, pai_id, mae_id, peso)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
-      [identificacao, sexo, raca, data_nascimento, qualidade, pai_id, mae_id, peso]
+      [identificacao, sexo, raca, data_nascimento, qualidade_id || null, pai_id, mae_id, peso]
     );
     
     const createdGado = result.rows[0];
@@ -101,17 +111,13 @@ export async function POST(request) {
     // Retorna o gado criado com os identificadores do pai/mãe e qualidade para o frontend
     const fullResult = await pool.query(`
         SELECT 
-            g.*, g.peso,
-            CASE g.qualidade
-              WHEN 'B' THEN 'Bom'
-              WHEN 'N' THEN 'Neutra'
-              WHEN 'R' THEN 'Ruim'
-              WHEN 'D' THEN 'Desconhecido'
-              ELSE 'Desconhecido'
-            END as qualidade_extenso,
+            g.*, 
+            g.peso,
+            q.qualidade as qualidade_nome,
             p.identificacao as pai_identificador,
             m.identificacao as mae_identificador
         FROM gado g
+        LEFT JOIN qualidade q ON g.qualidade_id = q.id
         LEFT JOIN gado p ON g.pai_id = p.id
         LEFT JOIN gado m ON g.mae_id = m.id
         WHERE g.id = $1
