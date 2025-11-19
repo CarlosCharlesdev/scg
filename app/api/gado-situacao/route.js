@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 const pool = new Pool({
   host: 'localhost',
   port: 5432,
-  database: 'postgres',
+  database: 'scg01',
   user: 'postgres',
   password: '25052003', // Lembre-se de usar variáveis de ambiente
 });
