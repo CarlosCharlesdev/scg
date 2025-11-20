@@ -5,10 +5,11 @@ import DropdownMenu, { DropdownItem } from '../dropdown-menu';
 export default function Home() {
   const [gados, setGados] = useState([]);
   const [qualidades, setQualidades] = useState([]);
+  const [racas, setRacas] = useState([]);
   const [form, setForm] = useState({
     identificacao: '',
     sexo: 'M',
-    raca: '',
+    raca_id: '',
     data_nascimento: '',
     qualidade_id: '',
     pai_identificador: '',
@@ -18,15 +19,20 @@ export default function Home() {
   const [editando, setEditando] = useState(null);
   const [modalAberto, setModalAberto] = useState(false);
   const [modalQualidadeAberto, setModalQualidadeAberto] = useState(false);
+  const [modalRacaAberto, setModalRacaAberto] = useState(false);
   const [novaQualidade, setNovaQualidade] = useState('');
+  const [novaRaca, setNovaRaca] = useState('');
   const [editandoQualidade, setEditandoQualidade] = useState(null);
+  const [editandoRaca, setEditandoRaca] = useState(null);
   const [loading, setLoading] = useState(false);
   const [loadingQualidade, setLoadingQualidade] = useState(false);
+  const [loadingRaca, setLoadingRaca] = useState(false);
   const [busca, setBusca] = useState('');
 
   useEffect(() => {
     carregarGados();
     carregarQualidades();
+    carregarRacas();
   }, []);
 
   const carregarGados = async () => {
@@ -46,6 +52,16 @@ export default function Home() {
       setQualidades(data);
     } catch (error) {
       alert('Erro ao carregar qualidades: ' + error.message);
+    }
+  };
+
+  const carregarRacas = async () => {
+    try {
+      const res = await fetch('/api/raca');
+      const data = await res.json();
+      setRacas(data);
+    } catch (error) {
+      alert('Erro ao carregar raças: ' + error.message);
     }
   };
 
@@ -115,6 +131,42 @@ export default function Home() {
     setLoadingQualidade(false);
   };
 
+  // Criar ou atualizar raça
+  const handleSubmitRaca = async (e) => {
+    e.preventDefault();
+    setLoadingRaca(true);
+
+    try {
+      const url = editandoRaca ? `/api/raca` : '/api/raca';
+      const method = editandoRaca ? 'PUT' : 'POST';
+      const body = editandoRaca 
+        ? { id: editandoRaca, nome: novaRaca }
+        : { nome: novaRaca };
+
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+
+      if (res.ok) {
+        const racaCriada = await res.json();
+        alert(editandoRaca ? 'Raça atualizada!' : 'Raça cadastrada com sucesso!');
+        setNovaRaca('');
+        setEditandoRaca(null);
+        await carregarRacas();
+        // Seleciona automaticamente a raça recém-criada/atualizada
+        setForm({...form, raca_id: racaCriada.id});
+      } else {
+        const error = await res.json();
+        alert('Erro: ' + error.error);
+      }
+    } catch (error) {
+      alert('Erro: ' + error.message);
+    }
+    setLoadingRaca(false);
+  };
+
   // Deletar qualidade
   const handleDeletarQualidade = async (id) => {
     if (!confirm('Tem certeza que deseja deletar esta qualidade?')) return;
@@ -142,10 +194,43 @@ export default function Home() {
     }
   };
 
+  // Deletar raça
+  const handleDeletarRaca = async (id) => {
+    if (!confirm('Tem certeza que deseja deletar esta raça?')) return;
+
+    try {
+      const res = await fetch('/api/raca', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      });
+
+      if (res.ok) {
+        alert('Raça deletada com sucesso!');
+        await carregarRacas();
+        // Se a raça deletada estava selecionada, limpa a seleção
+        if (form.raca_id === id.toString()) {
+          setForm({...form, raca_id: ''});
+        }
+      } else {
+        const error = await res.json();
+        alert('Erro: ' + error.error);
+      }
+    } catch (error) {
+      alert('Erro ao deletar: ' + error.message);
+    }
+  };
+
   // Editar qualidade
   const handleEditarQualidade = (qualidade) => {
     setNovaQualidade(qualidade.qualidade);
     setEditandoQualidade(qualidade.id);
+  };
+
+  // Editar raça
+  const handleEditarRaca = (raca) => {
+    setNovaRaca(raca.nome);
+    setEditandoRaca(raca.id);
   };
 
   // Função auxiliar para formatar a data para YYYY-MM-DD
@@ -170,7 +255,7 @@ export default function Home() {
     setForm({
       identificacao: gado.identificacao,
       sexo: gado.sexo,
-      raca: gado.raca || '',
+      raca_id: gado.raca_id || '',
       data_nascimento: formattedDate,
       qualidade_id: gado.qualidade_id || '',
       pai_identificador: gado.pai_identificador || '',
@@ -201,7 +286,7 @@ export default function Home() {
     setForm({
       identificacao: '',
       sexo: 'M',
-      raca: '',
+      raca_id: '',
       data_nascimento: '',
       qualidade_id: '',
       pai_identificador: '',
@@ -214,6 +299,11 @@ export default function Home() {
   const limparFormQualidade = () => {
     setNovaQualidade('');
     setEditandoQualidade(null);
+  };
+
+  const limparFormRaca = () => {
+    setNovaRaca('');
+    setEditandoRaca(null);
   };
   
   return ( 
@@ -319,7 +409,7 @@ export default function Home() {
                           </td>
                           <td className="px-4 py-3 text-gray-700">{gado.identificacao}</td>
                           <td className="px-4 py-3 text-gray-700">{gado.sexo === 'M' ? '♂️' : '♀️'}</td>
-                          <td className="px-4 py-3 text-gray-700">{gado.raca || '-'}</td>
+                          <td className="px-4 py-3 text-gray-700">{gado.raca_nome || '-'}</td>
                           <td className="px-4 py-3 text-gray-700">{gado.peso || '-'}</td>
                           <td className="px-4 py-3 text-gray-700">{gado.qualidade_nome || '-'}</td>
                           <td className="px-4 py-3 text-gray-700">
@@ -384,19 +474,32 @@ export default function Home() {
                   </select>
                 </div>
 
-                {/* Raça */}
+                {/* Raça - Com botão + */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Raça
                   </label>
-                  <select
-                    value={form.raca}
-                    onChange={(e) => setForm({...form, raca: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent focus:outline-none">
-                    <option value="" className='text-gray-700'></option>
-                    <option value="Nelore" className='text-gray-700'>Nelore</option>
-                    <option value="Angus" className='text-gray-700'>Angus</option>
-                  </select>
+                  <div className="flex gap-2">
+                    <select
+                      value={form.raca_id}
+                      onChange={(e) => setForm({...form, raca_id: e.target.value})}
+                      className="flex-1 px-3 py-2 border border-gray-300 text-gray-700 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent focus:outline-none">
+                      <option value="" className='text-gray-700'>Selecione...</option>
+                      {racas.map((raca) => (
+                        <option key={raca.id} value={raca.id} className='text-gray-700'>
+                          {raca.nome}
+                        </option>
+                      ))}
+                    </select>
+                    <button
+                      type="button"
+                      onClick={() => { limparFormRaca(); setModalRacaAberto(true); }}
+                      className="bg-[#4a7c2c] hover:bg-[#2d5016] text-white font-bold px-4 py-2 rounded-lg transition cursor-pointer"
+                      title="Adicionar nova raça"
+                    >
+                      +
+                    </button>
+                  </div>
                 </div>
 
                 {/* Data de nascimento */}
@@ -469,7 +572,7 @@ export default function Home() {
                     <option value="" className='text-gray-700'></option>
                     {gados.filter(g => g.sexo === 'M' && g.id !== Number(editando)).map((gado) => (
                       <option key={gado.id} value={gado.identificacao} className='text-gray-700'>
-                        {gado.identificacao} {gado.raca ? `- ${gado.raca}` : ''}
+                        {gado.identificacao} {gado.raca_nome ? `- ${gado.raca_nome}` : ''}
                       </option>
                     ))}
                   </select>
@@ -488,7 +591,7 @@ export default function Home() {
                     <option value="" className='text-gray-700'></option>
                     {gados.filter(g => g.sexo === 'F' && g.id !== Number(editando)).map((gado) => (
                       <option key={gado.id} value={gado.identificacao} className='text-gray-700'>
-                        {gado.identificacao} {gado.raca ? `- ${gado.raca}` : ''}
+                        {gado.identificacao} {gado.raca_nome ? `- ${gado.raca_nome}` : ''}
                       </option>
                     ))}
                   </select>
@@ -626,6 +729,125 @@ export default function Home() {
                 <button
                   type="button"
                   onClick={() => { setModalQualidadeAberto(false); limparFormQualidade(); }}
+                  className="flex-1 px-6 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition cursor-pointer"
+                >
+                  Fechar
+                </button>	
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Cadastro/Edição de Raça com Mini-Grid */}
+      {modalRacaAberto && (
+        <div className="fixed inset-0 backdrop-blur-[2px] bg-opacity-50 flex items-center justify-center z-[60] p-4">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-auto max-h-[90vh] overflow-y-auto">
+            <div className="bg-gradient-to-r from-[#2d5016] to-[#4a7c2c] text-white px-6 py-4 rounded-t-lg flex justify-between items-center sticky top-0 z-10">
+              <h2 className="text-xl font-semibold">
+                {editandoRaca ? 'Editar Raça' : 'Nova Raça'}
+              </h2>
+              <button 
+                onClick={() => { setModalRacaAberto(false); limparFormRaca(); }}
+                className="text-white hover:text-gray-200 text-2xl font-bold cursor-pointer"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="p-6">
+              {/* Formulário de Cadastro/Edição */}
+              <form onSubmit={handleSubmitRaca} className="mb-6">
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-800 mb-1">
+                    Nome da Raça *
+                  </label>
+                  <input 
+                    type="text"
+                    required
+                    value={novaRaca}
+                    onChange={(e) => setNovaRaca(e.target.value)}
+                    className="w-full px-3 py-2 text-gray-700 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent focus:outline-none"
+                    placeholder="Ex: Nelore, Angus, etc."
+                    autoFocus
+                  />
+                </div>
+
+                <div className="flex gap-2">
+                  <button
+                    type="submit"
+                    disabled={loadingRaca}
+                    className="flex-1 hover:bg-[#2d5016] bg-[#4a7c2c] text-white font-bold py-2 px-4 rounded-lg transition disabled:bg-gray-400 cursor-pointer"
+                  >
+                    {loadingRaca ? 'Processando...' : (editandoRaca ? 'Atualizar' : 'Cadastrar')}
+                  </button>
+                  
+                  {editandoRaca && (
+                    <button
+                      type="button"
+                      onClick={() => limparFormRaca()}
+                      className="px-6 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition cursor-pointer"
+                    >
+                      Cancelar Edição
+                    </button>
+                  )}
+                </div>
+              </form>
+
+              {/* Mini-Grid de Raças */}
+              <div className="border-t pt-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-4">Raças Cadastradas</h3>
+                
+                {racas.length === 0 ? (
+                  <div className="text-center text-gray-500 py-8">
+                    Nenhuma raça cadastrada ainda
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead className="bg-gray-100">
+                        <tr>
+                          <th className="px-4 py-3 text-left text-gray-700 font-semibold">Nome</th>
+                          <th className="px-4 py-3 text-center text-gray-700 font-semibold">Ações</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {racas.map((raca, index) => (
+                          <tr key={raca.id} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                            <td className="px-4 py-3 text-gray-700">{raca.nome}</td>
+                            <td className="px-4 py-3">
+                              <div className="flex gap-2 justify-center">
+                                <button
+                                  type="button"
+                                  onClick={() => handleEditarRaca(raca)}
+                                  className="text-blue-600 hover:text-blue-800 px-3 py-1 rounded transition text-sm cursor-pointer"
+                                  title="Editar"
+                                >
+                                  <img src="lapis.png" alt="Editar" className="w-4 h-4"></img>
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handleDeletarRaca(raca.id)}
+                                  className="text-red-600 hover:text-red-800 px-3 py-1 rounded transition text-sm cursor-pointer"
+                                  title="Deletar"
+                                >
+                                  <img src="lixo.png" alt="Deletar" className="w-4 h-4"></img>
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+
+              {/* Botão Fechar */}
+              <div className="flex gap-2 mt-6">
+                <button
+                  type="button"
+                  onClick={() => { setModalRacaAberto(false); limparFormRaca(); }}
                   className="flex-1 px-6 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition cursor-pointer"
                 >
                   Fechar
